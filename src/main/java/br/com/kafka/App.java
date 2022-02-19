@@ -1,9 +1,11 @@
 package br.com.kafka;
 
+import br.com.kafka.producer.Producer;
+
 public class App {
 
     public static void main(String[] args) {
-        System.out.println("Hello Kafka!");
+        new Producer().create("Testing producer 4!");
     }
 
 }
