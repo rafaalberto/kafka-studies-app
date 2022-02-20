@@ -19,15 +19,9 @@ public final class ProducerFactory {
     private static final String TOPIC = "first-topic";
 
     public static void create(String message) {
-        var properties = new Properties();
-        properties.setProperty(BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
-        properties.setProperty(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        properties.setProperty(VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-
+        var kafkaProducer = new KafkaProducer<String, String>(getProperties());
         var producerRecord = new ProducerRecord<String, String>(TOPIC, message);
-
-        var producer = new KafkaProducer<String, String>(properties);
-        producer.send(producerRecord, (metadata, exception) -> {
+        kafkaProducer.send(producerRecord, (metadata, exception) -> {
             if (exception == null) {
                 logger.info(String.format("Sending metadata - DateTime: %s - Topic: %s - Partition: %s - Offset: %s",
                         LocalDateTime.now(), metadata.topic(), metadata.partition(), metadata.offset()));
@@ -35,8 +29,16 @@ public final class ProducerFactory {
                 logger.error("Error while producing: ", exception);
             }
         });
-        producer.flush();
-        producer.close();
+        kafkaProducer.flush();
+        kafkaProducer.close();
+    }
+
+    private static Properties getProperties() {
+        var properties = new Properties();
+        properties.setProperty(BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
+        properties.setProperty(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        properties.setProperty(VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        return properties;
     }
 
 }

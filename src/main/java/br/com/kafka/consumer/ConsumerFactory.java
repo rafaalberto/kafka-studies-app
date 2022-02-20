@@ -20,14 +20,7 @@ public final class ConsumerFactory {
     private static final String TOPIC = "first-topic";
 
     public static void create(String groupId) {
-        var properties = new Properties();
-        properties.setProperty(BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
-        properties.setProperty(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        properties.setProperty(VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        properties.setProperty(GROUP_ID_CONFIG, groupId);
-        properties.setProperty(AUTO_OFFSET_RESET_CONFIG, "earliest");
-
-        var consumer = new KafkaConsumer<String, String>(properties);
+        var consumer = new KafkaConsumer<String, String>(getProperties(groupId));
         consumer.subscribe(Collections.singleton(TOPIC));
 
         while (true) {
@@ -36,6 +29,16 @@ public final class ConsumerFactory {
                     logger.info(String.format("DateTime: %s - Key: %s - Value: %s - Partition: %s - Offset: %s",
                             LocalDateTime.now(), consumerRecord.key(), consumerRecord.value(), consumerRecord.partition(), consumerRecord.offset())));
         }
+    }
+
+    private static Properties getProperties(String groupId) {
+        var properties = new Properties();
+        properties.setProperty(BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
+        properties.setProperty(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        properties.setProperty(VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        properties.setProperty(GROUP_ID_CONFIG, groupId);
+        properties.setProperty(AUTO_OFFSET_RESET_CONFIG, "earliest");
+        return properties;
     }
 
 }
