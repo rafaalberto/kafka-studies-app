@@ -9,7 +9,7 @@ public class ConsumerApp {
 
     public static void main(String[] args) {
         logger.info("Consumer has been started");
-        ConsumerFactory.create("my-forth-application");
+        ConsumerFactory.create("my-app-1");
     }
 
 }
