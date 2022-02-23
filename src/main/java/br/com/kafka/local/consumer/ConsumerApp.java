@@ -1,4 +1,4 @@
-package br.com.kafka.consumer;
+package br.com.kafka.local.consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package br.com.kafka.consumer;
+package br.com.kafka.local.consumer;
 
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;

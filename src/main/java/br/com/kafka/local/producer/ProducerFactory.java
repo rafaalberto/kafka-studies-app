@@ -1,4 +1,4 @@
-package br.com.kafka.producer;
+package br.com.kafka.local.producer;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
