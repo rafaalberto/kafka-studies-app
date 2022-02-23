@@ -25,7 +25,7 @@ public final class TwitterClient {
         Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
         StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
 
-        List<String> terms = Lists.newArrayList("kafka");
+        List<String> terms = Lists.newArrayList("java");
         hosebirdEndpoint.trackTerms(terms);
 
         Authentication hosebirdAuth = new OAuth1(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, SECRET);

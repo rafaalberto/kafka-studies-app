@@ -16,10 +16,20 @@ public class TwitterApp {
         var client = TwitterClient.createClient(messageQueue);
         client.connect();
 
+        var twitterKafkaProducer = new TwitterKafkaProducerFactory();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            logger.info("Stopping application");
+            client.stop();
+            twitterKafkaProducer.close();
+            logger.info("Application done!");
+        }));
+
         while (!client.isDone()) {
             try {
                 var message = messageQueue.poll(5, TimeUnit.SECONDS);
                 logger.info("Message from twitter: {}", message);
+                twitterKafkaProducer.sendMessage(message);
             } catch (InterruptedException e) {
                 logger.error("Error to poll messages: {}", e.getMessage());
                 client.stop();
