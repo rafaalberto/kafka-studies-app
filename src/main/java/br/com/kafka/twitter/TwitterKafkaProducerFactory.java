@@ -20,7 +20,7 @@ public final class TwitterKafkaProducerFactory {
 
     private final KafkaProducer<String, String> kafkaProducer;
 
-    public TwitterKafkaProducerFactory () {
+    public TwitterKafkaProducerFactory() {
         kafkaProducer = new KafkaProducer<>(getProperties());
     }
 
@@ -45,7 +45,22 @@ public final class TwitterKafkaProducerFactory {
         properties.setProperty(BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
         properties.setProperty(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.setProperty(VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        setSaferSettings(properties);
+        setHighThroughputSettings(properties);
         return properties;
+    }
+
+    private void setSaferSettings(Properties properties) {
+        properties.setProperty(ENABLE_IDEMPOTENCE_CONFIG, "true");
+        properties.setProperty(ACKS_CONFIG, "all");
+        properties.setProperty(RETRIES_CONFIG, Integer.toString(Integer.MAX_VALUE));
+        properties.setProperty(MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, "5");
+    }
+
+    private void setHighThroughputSettings(Properties properties) {
+        properties.setProperty(COMPRESSION_TYPE_CONFIG, "snappy");
+        properties.setProperty(LINGER_MS_CONFIG, "20");
+        properties.setProperty(BATCH_SIZE_CONFIG, "32768");
     }
 
 }
